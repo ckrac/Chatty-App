@@ -32,15 +32,21 @@ class ChatBar extends Component {
     );
   }
 
+  // Handles when the text box input changes
   _nameChanged = e => {
     this.setState({username: e.target.value})
   }
-
+  // Handles when the text box input changes
   _contentChanged = e => {
-    this.setState({content: e.target.value});
+    this.setState({id: e.target.value,
+      content: e.target.value});
   }
-
+  // Handles submit when pressing enter into input box.
+  // Calls to add prop which calls func in app to setState
   _submitChange = () => {
+    // if (this.state.username === "") {
+    //   this.setState({username: "Anonymous"})
+    // }
     console.log('pressed enter');
     console.log(this.state.username);
     console.log(this.state.content);

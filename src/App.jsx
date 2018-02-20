@@ -18,7 +18,7 @@ class App extends Component {
           username: "Anonymous",
           content: "No, I think you lost them. You lost your marbles Bob. You lost them for good."
         }
-      ]
+      ],
     }
   }
 
@@ -35,6 +35,8 @@ class App extends Component {
 
   componentDidMount() {
     console.log("componentDidMount <App />");
+    const exampleSocket = new WebSocket("ws:0.0.0.0:3001", "protocolOne");
+    // console.log("Connected to server");
     setTimeout(() => {
       console.log("Simulating incoming message");
       // Add a new message to the list of messages in the data store
