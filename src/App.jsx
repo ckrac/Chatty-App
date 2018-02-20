@@ -19,12 +19,16 @@ class App extends Component {
           content: "No, I think you lost them. You lost your marbles Bob. You lost them for good."
         }
       ],
+      socket: {}
     }
   }
 
   addMessage = message => {
-    console.log(message);
+    // console.log(message);
     // new array by update this.state with message object
+    if (message.username === "") {
+      message.username = "Anonymous"
+    }
     const newMessages = [...this.state.messages, message]
     // this.setState({messages: newMessages})
     // const messagesClone = this.state.messages;
@@ -33,10 +37,20 @@ class App extends Component {
     this.setState({messages: newMessages})
   }
 
+  sendMessage = message => {
+    console.log('from sendMessage func', message);
+    const msg = {
+      username: message.username,
+      content: message.content
+    }
+
+    this.state.socket.send(JSON.stringify(msg));
+  }
+
   componentDidMount() {
     console.log("componentDidMount <App />");
     const exampleSocket = new WebSocket("ws:0.0.0.0:3001", "protocolOne");
-    // console.log("Connected to server");
+    console.log("Connected to server");
     setTimeout(() => {
       console.log("Simulating incoming message");
       // Add a new message to the list of messages in the data store
@@ -44,7 +58,8 @@ class App extends Component {
       const messages = this.state.messages.concat(newMessage)
       // Update the state of the app component.
       // Calling setState will trigger a call to render() in App and all child components.
-      this.setState({messages: messages})
+      this.setState({messages: messages,
+        socket: exampleSocket})
     }, 3000);
   }
 
@@ -55,7 +70,7 @@ class App extends Component {
         <a href="/" className="navbar-brand">Chatty</a>
       </nav>
       <MessageList messages={this.state.messages} />
-      <ChatBar name={this.state.currentUser.name} add={this.addMessage}/>
+      <ChatBar name={this.state.currentUser.name} add={this.addMessage} send ={this.sendMessage} />
       </div>
     );
   }
