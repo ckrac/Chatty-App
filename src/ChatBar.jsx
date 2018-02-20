@@ -48,7 +48,6 @@ class ChatBar extends Component {
     console.log(this.state.username);
     console.log(this.state.content);
     this.props.add(this.state);
-    this.props.send(this.state);
   }
 }
 
