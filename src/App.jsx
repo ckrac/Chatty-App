@@ -17,21 +17,8 @@ class App extends Component {
       username: message.username,
       content: message.content
     }
-
-    // if (msg.username === "") {
-    //   .username = "Anonymous";
-    // }
-
-    // const newMessages = [...this.state.messages, serverMsg];
-    // this.setState({messages: newMessages});
-    // add later: use .onopen with sending data to make sure theres a connection
-    // this.state.socket.onopen = () => {
-    //   console.log('trying to send something');
       // send message obj to server
       this.socket.send(JSON.stringify(msg));
-      // recieve message from server
-
-    // }
   }
 
   componentDidMount() {
@@ -41,7 +28,7 @@ class App extends Component {
     this.socket.onopen = function () {
     console.log("Connected to server");
     }
-
+    // recieve messsage from server and render it
     this.socket.onmessage = (event) => {
       const serverMsg = JSON.parse(event.data);
       console.log('from server ', serverMsg);
@@ -53,7 +40,6 @@ class App extends Component {
       const newMessages = [...this.state.messages, serverMsg];
       this.setState({messages: newMessages});
     }
-
     // setTimeout(() => {
     //   console.log("Simulating incoming message");
     //   // Add a new message to the list of messages in the data store
