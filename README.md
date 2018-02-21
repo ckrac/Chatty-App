@@ -8,8 +8,8 @@ Chatty app is a client-side SPA (single-page app) built with ReactJS. Chatty wil
 
 ## Screenshots
 
-!["Home page"](https://github.com/ckrac/midterm_project/blob/code/cleanup/docs/HomePage.png?raw=true)
-!["Users chatting"](https://github.com/ckrac/midterm_project/blob/code/cleanup/docs/OrderPage.png?raw=true)
+!["Home page"](https://github.com/ckrac/react-simple-boilerplate/blob/master/docs/home.png?raw=true)
+!["Users chatting"](https://github.com/ckrac/react-simple-boilerplate/blob/master/docs/usersChat.png?raw=true)
 
 
 ## Getting Started
