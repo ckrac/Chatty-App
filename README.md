@@ -1,7 +1,19 @@
-React Boilerplate
+Chatty App Project
 =====================
 
-A minimal and light dev environment for ReactJS.
+# Chatty App Project
+
+Chatty app is a client-side SPA (single-page app) built with ReactJS. Chatty will allow users to communicate with each other without having to register accounts.
+
+
+## Screenshots
+
+!["Home page"](https://github.com/ckrac/midterm_project/blob/code/cleanup/docs/HomePage.png?raw=true)
+!["Users chatting"](https://github.com/ckrac/midterm_project/blob/code/cleanup/docs/OrderPage.png?raw=true)
+
+
+## Getting Started
+
 
 ### Usage
 
