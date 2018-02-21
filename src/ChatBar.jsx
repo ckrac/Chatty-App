@@ -44,10 +44,10 @@ class ChatBar extends Component {
   // Handles submit when pressing enter into input box.
   // Calls to add prop which calls func in app to setState
   _submitChange = () => {
-    console.log('pressed enter');
-    console.log(this.state.username);
-    console.log(this.state.content);
+    // console.log(this.state.username);
+    // console.log(this.state.content);
     this.props.add(this.state);
+    this.props.changeUser(this.state.username);
   }
 }
 

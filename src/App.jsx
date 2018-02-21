@@ -12,13 +12,34 @@ class App extends Component {
   }
 
   addMessage = message => {
-    console.log('from sendMessage func', message);
+    // console.log('from sendMessage func', message);
     const msg = {
+      type: "postMessage",
       username: message.username,
       content: message.content
     }
       // send message obj to server
       this.socket.send(JSON.stringify(msg));
+  }
+
+  changeUser = user => {
+    // console.log('user' , user);
+    // console.log('this state user', this.state.currentUser.name);
+    // if (this.state.currentUser.name !== user){
+    //   this.setState({currentUser: {name: user}});
+
+    //   const notification = {
+    //     type: "incomingNotification",
+    //     user: user
+    //   }
+      // send message obj to server
+    if (this.state.currentUser.name !== user){
+      const notification = {
+              type: "incomingNotification",
+              user: user
+      }
+    this.socket.send(JSON.stringify(notification));
+    }
   }
 
   componentDidMount() {
@@ -30,15 +51,33 @@ class App extends Component {
     }
     // recieve messsage from server and render it
     this.socket.onmessage = (event) => {
-      const serverMsg = JSON.parse(event.data);
-      console.log('from server ', serverMsg);
+      const data = JSON.parse(event.data);
+      console.log('from server ', data);
 
-      if (serverMsg.username === "") {
-        serverMsg.username = "Anonymous";
+      switch(data.type) {
+        case "incomingMessage":
+          // handle incoming message
+          if (data.username === "") {
+            data.username = "Anonymous";
+          }
+          const newMessages = [...this.state.messages, data];
+          this.setState({messages: newMessages});
+
+          break;
+
+        case "incomingNotification":
+          // handle incoming notification
+          const user = data.user;
+          this.setState({currentUser: {name: user}});
+          break;
       }
 
-      const newMessages = [...this.state.messages, serverMsg];
-      this.setState({messages: newMessages});
+
+      // if (data.username === "") {
+      //   data.username = "Anonymous";
+      // }
+      // const newMessages = [...this.state.messages, data];
+      // this.setState({messages: newMessages});
     }
     // setTimeout(() => {
     //   console.log("Simulating incoming message");
@@ -57,8 +96,8 @@ class App extends Component {
       <nav className="navbar">
         <a href="/" className="navbar-brand">Chatty</a>
       </nav>
-      <MessageList messages={this.state.messages} />
-      <ChatBar name={this.state.currentUser.name} add ={this.addMessage} />
+      <MessageList messages={this.state.messages} notification={this.state.currentUser.name} />
+      <ChatBar name={this.state.currentUser.name} add ={this.addMessage} changeUser={this.changeUser} />
       </div>
     );
   }
