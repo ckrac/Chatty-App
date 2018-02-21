@@ -17,6 +17,11 @@ class ChatBar extends Component {
           placeholder={this.props.name}
           value={this.state.username}
           onChange={this._nameChanged}
+          onKeyPress={e => {
+            if (e.key === "Enter") {
+              this._changeUser();
+            }
+          }}
         />
         <input className="chatbar-message"
           placeholder="Type a message and hit ENTER"
@@ -44,9 +49,11 @@ class ChatBar extends Component {
   // Handles submit when pressing enter into input box.
   // Calls to add prop which calls func in app to setState
   _submitChange = () => {
-    // console.log(this.state.username);
-    // console.log(this.state.content);
     this.props.add(this.state);
+  }
+
+  _changeUser = () => {
+    console.log('hit enter')
     this.props.changeUser(this.state.username);
   }
 }

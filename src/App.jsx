@@ -13,6 +13,8 @@ class App extends Component {
 
   addMessage = message => {
     // console.log('from sendMessage func', message);
+
+
     const msg = {
       type: "postMessage",
       username: message.username,
@@ -33,12 +35,14 @@ class App extends Component {
     //     user: user
     //   }
       // send message obj to server
+    console.log("from changeuser func app",user)
     if (this.state.currentUser.name !== user){
       const notification = {
-              type: "incomingNotification",
-              user: user
+              type: "postNotification",
+              content: `${this.state.currentUser.name} has changed their name to ${user}`,
       }
     this.socket.send(JSON.stringify(notification));
+    this.setState({currentUser: {name: user}});
     }
   }
 
@@ -67,8 +71,10 @@ class App extends Component {
 
         case "incomingNotification":
           // handle incoming notification
-          const user = data.user;
-          this.setState({currentUser: {name: user}});
+          console.log(data);
+          // const user = data.user;
+          this.setState({notification: {content: data.content}
+            });
           break;
       }
 
@@ -96,7 +102,7 @@ class App extends Component {
       <nav className="navbar">
         <a href="/" className="navbar-brand">Chatty</a>
       </nav>
-      <MessageList messages={this.state.messages} notification={this.state.currentUser.name} />
+      <MessageList messages={this.state.messages} notification={this.state.notification} />
       <ChatBar name={this.state.currentUser.name} add ={this.addMessage} changeUser={this.changeUser} />
       </div>
     );
