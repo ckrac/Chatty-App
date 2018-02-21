@@ -16,7 +16,8 @@ class App extends Component {
     const msg = {
       type: "postMessage",
       username: message.username,
-      content: message.content
+      content: message.content,
+      color: this.state.color
     }
       // send message obj to server
       this.socket.send(JSON.stringify(msg));
@@ -75,16 +76,25 @@ class App extends Component {
 
           break;
 
+        case "incomingColor":
+          // handle current total users online
+          console.log(data);
+          // console.log(data.totalClients)
+          this.setState({color: data.color});
+
+          break;
+
+
         case "incomingConnectionCount":
           // handle current total users online
-          console.log(data.totalClients)
+          console.log(data);
+          // console.log(data.totalClients)
           this.setState({totalClients: data.totalClients});
 
           break;
 
         case "incomingUpdateConnection":
           // handle update of current users online
-          console.log(data);
           this.setState({totalClients: data.totalClients});
 
           break;
@@ -97,7 +107,7 @@ class App extends Component {
     return (
       <div>
       <Nav totalClients={this.state.totalClients} />
-      <MessageList messages={this.state.messages} />
+      <MessageList messages={this.state.messages} color={this.state.color} />
       <ChatBar name={this.state.currentUser.name} add ={this.addMessage} changeUser={this.changeUser} />
       </div>
     );

@@ -5,6 +5,9 @@ const WebSocket = require('ws');
 // id generator
 const uuidv4 = require('uuid/v4');
 
+// random color generator
+const randomColor = require('randomcolor');
+
 // Set the port to 3001
 const PORT = 3001;
 
@@ -22,9 +25,17 @@ const wss = new SocketServer({ server });
 // the ws parameter in the callback.
 wss.on('connection', (ws) => {
   console.log('Client connected');
+
+  //assign random color to each user
+  const color = randomColor();
+  console.log(color)
+  const colorObj = {type: "incomingColor", color: color};
+  ws.send(JSON.stringify(colorObj));
+
   let totalClients = wss.clients.size;
   let countObj = {type: "incomingConnectionCount", totalClients : totalClients};
   // Upon connection to websocket, send total users currently connected to server
+
   wss.clients.forEach(function each(client) {
     if (client.readyState === WebSocket.OPEN) {
       client.send(JSON.stringify(countObj));
