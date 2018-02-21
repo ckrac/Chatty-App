@@ -5,9 +5,6 @@ import Notification from './Notification.jsx';
 class MessageList extends Component {
   render() {
     console.log("Rendering <MessageList />");
-
-    // const checkUser = (this.props.notification === this.props.messages[lastMessage].username);
-    // console.log(checkUser);
     return (
       <main className="messages">
       {this.props.messages.map((message) => {

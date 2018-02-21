@@ -23,9 +23,8 @@ const wss = new SocketServer({ server });
 wss.on('connection', (ws) => {
   console.log('Client connected');
   let totalClients = wss.clients.size;
-  console.log("total clients", totalClients)
   let countObj = {type: "incomingConnectionCount", totalClients : totalClients};
-
+  // Upon connection to websocket, send total users currently connected to server
   wss.clients.forEach(function each(client) {
     if (client.readyState === WebSocket.OPEN) {
       client.send(JSON.stringify(countObj));
@@ -67,13 +66,11 @@ wss.on('connection', (ws) => {
     console.log('Client disconnected');
     let count =  wss.clients.size;
     let decreaseCount = {type: "incomingUpdateConnection", totalClients : count};
+    // update current users of the total current users when a user disconnects
     wss.clients.forEach(function each(client) {
     if (client.readyState === WebSocket.OPEN) {
       client.send(JSON.stringify(decreaseCount));
       }
     });
-
   });
-
-
 });
