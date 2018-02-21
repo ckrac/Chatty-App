@@ -29,3 +29,4 @@ Chatty app is a client-side SPA (single-page app) built with ReactJS. Chatty wil
 * [webpack-dev-server](https://github.com/webpack/webpack-dev-server)
 * UUID
 * WS
+* randomcolor
