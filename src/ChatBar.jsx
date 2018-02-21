@@ -50,6 +50,7 @@ class ChatBar extends Component {
   // Calls to add prop which calls func in app to setState
   _submitChange = () => {
     this.props.add(this.state);
+    this.setState({content: ""});
   }
 
   _changeUser = () => {

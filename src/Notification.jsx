@@ -5,7 +5,7 @@ class Notification extends Component {
     console.log("Rendering <Message />");
     return (
     <div className="message system">
-      {this.props.username} changed their name to {this.props.notification}
+      {this.props.content}
     </div>
     );
   }

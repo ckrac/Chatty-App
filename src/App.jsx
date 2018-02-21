@@ -72,9 +72,9 @@ class App extends Component {
         case "incomingNotification":
           // handle incoming notification
           console.log(data);
-          // const user = data.user;
-          this.setState({notification: {content: data.content}
-            });
+          const newNotification = [...this.state.messages, data];
+          this.setState({messages: newNotification});
+
           break;
       }
 
@@ -102,7 +102,7 @@ class App extends Component {
       <nav className="navbar">
         <a href="/" className="navbar-brand">Chatty</a>
       </nav>
-      <MessageList messages={this.state.messages} notification={this.state.notification} />
+      <MessageList messages={this.state.messages} />
       <ChatBar name={this.state.currentUser.name} add ={this.addMessage} changeUser={this.changeUser} />
       </div>
     );
