@@ -11,10 +11,7 @@ class ImgMessage extends Component {
       <div className="message">
         <span className="message-username" style={style} >{this.props.username}</span>
         <span className="message-content">{this.props.content}<br /><img src={img}/></span>
-{/*        <span className="message-content" >
-          <img src={img}/>
-        </span>
-*/}      </div>
+      </div>
     );
   }
 }

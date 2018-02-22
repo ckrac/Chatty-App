@@ -19,7 +19,6 @@ class App extends Component {
     let matches = string.match(/\bhttps?:\/\/\S+/gi);
 
     if (matches === null) {
-      console.log('not an img url');
       const msg = {
         type: "postMessage",
         username: message.username,
@@ -31,12 +30,10 @@ class App extends Component {
     } else {
       // grab url from string and seperate it
       const match = matches[0]
-      console.log(match);
+
       string = string.replace(matches[0], "")
-      console.log(string);
       // check if url is an img url
       if(isImageUrl(match)) {
-        console.log('this is an img url');
         const msgImg = {
           type: "postImg",
           username: message.username,
@@ -53,7 +50,6 @@ class App extends Component {
 
   changeUser = user => {
       // send message obj to server
-    console.log("from changeuser func app",user)
     if (this.state.currentUser.name !== user){
       const current = this.state.currentUser.name ? this.state.currentUser.name : "Anonymous"
       const notification = {
@@ -72,14 +68,6 @@ class App extends Component {
     this.socket.onopen = function () {
       console.log("Connected to server");
     }
-
-    if (this.socket.readyState === "OPEN") {
-      const newConnection = {type: "postConnection"};
-      console.log(newConnection);
-    }
-
-    // this.socket.send(JSON.stringify(newConnection));
-
     // recieve messsage from server and render it
     this.socket.onmessage = (event) => {
       const data = JSON.parse(event.data);
@@ -101,7 +89,6 @@ class App extends Component {
           if (data.username === "") {
             data.username = "Anonymous";
           }
-          console.log("incomingimg", data);
           const newImgMessage = [...this.state.messages, data];
           this.setState({messages: newImgMessage});
 
@@ -109,7 +96,6 @@ class App extends Component {
 
         case "incomingNotification":
           // handle incoming notification
-          console.log(data);
           const newNotification = [...this.state.messages, data];
           this.setState({messages: newNotification});
 
@@ -117,17 +103,12 @@ class App extends Component {
 
         case "incomingColor":
           // handle current total users online
-          console.log(data);
-          // console.log(data.totalClients)
           this.setState({color: data.color});
 
           break;
 
-
         case "incomingConnectionCount":
           // handle current total users online
-          console.log(data);
-          // console.log(data.totalClients)
           this.setState({totalClients: data.totalClients});
 
           break;
@@ -137,7 +118,6 @@ class App extends Component {
           this.setState({totalClients: data.totalClients});
 
           break;
-
       }
     }
   }
