@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import ChatBar from './ChatBar.jsx';
 import MessageList from './MessageList.jsx';
 import Nav from './Nav.jsx';
+const isImageUrl = require('is-image-url');
 
 class App extends Component {
   constructor(props){
@@ -13,14 +14,30 @@ class App extends Component {
   }
 
   addMessage = message => {
-    const msg = {
-      type: "postMessage",
-      username: message.username,
-      content: message.content,
-      color: this.state.color
-    }
+
+    if(isImageUrl(message.content)) {
+      console.log('this is an img url');
+      const msgImg = {
+        type: "postImg",
+        username: message.username,
+        content: message.content,
+        color: this.state.color
+      }
+      // send message obj to server
+      this.socket.send(JSON.stringify(msgImg));
+
+    } else {
+      console.log('not an img url');
+      const msg = {
+        type: "postMessage",
+        username: message.username,
+        content: message.content,
+        color: this.state.color
+      }
       // send message obj to server
       this.socket.send(JSON.stringify(msg));
+
+    }
   }
 
   changeUser = user => {
@@ -65,6 +82,17 @@ class App extends Component {
           }
           const newMessages = [...this.state.messages, data];
           this.setState({messages: newMessages});
+
+          break;
+
+        case "incomingImg":
+          // handle incoming message
+          if (data.username === "") {
+            data.username = "Anonymous";
+          }
+          console.log("incomingimg", data);
+          const newImgMessage = [...this.state.messages, data];
+          this.setState({messages: newImgMessage});
 
           break;
 

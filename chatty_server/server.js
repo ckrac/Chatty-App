@@ -48,6 +48,7 @@ wss.on('connection', (ws) => {
     let messageObj = JSON.parse(message)
     const id = uuidv4();
     messageObj.id = id;
+    console.log(messageObj)
 
     if(messageObj.type === "postMessage") {
       console.log(`User ${messageObj.username} said ${messageObj.content}, type = ${messageObj.type}`);
@@ -62,6 +63,14 @@ wss.on('connection', (ws) => {
     } else  if (messageObj.type === "postNotification"){
       console.log(`Current user: ${messageObj.user}, type = ${messageObj.type}`)
       messageObj.type = "incomingNotification";
+
+      wss.clients.forEach(function each(client) {
+        if (client.readyState === WebSocket.OPEN) {
+          client.send(JSON.stringify(messageObj));
+        }
+      });
+    } else if (messageObj.type === "postImg") {
+      messageObj.type = "incomingImg";
 
       wss.clients.forEach(function each(client) {
         if (client.readyState === WebSocket.OPEN) {
