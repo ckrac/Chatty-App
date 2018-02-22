@@ -5,13 +5,16 @@ class ImgMessage extends Component {
     console.log("Rendering <Message />");
     const thisColor = this.props.color;
     const style = {color: `${thisColor}`}
-    const img = `${this.props.content}`;
+    const img = `${this.props.url}`;
     console.log(img)
     return (
       <div className="message">
         <span className="message-username" style={style} >{this.props.username}</span>
-        <span className="message-content"><img src={img}/></span>
-      </div>
+        <span className="message-content">{this.props.content}<br /><img src={img}/></span>
+{/*        <span className="message-content" >
+          <img src={img}/>
+        </span>
+*/}      </div>
     );
   }
 }

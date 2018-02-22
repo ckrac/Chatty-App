@@ -11,11 +11,17 @@ class MessageList extends Component {
       <main className="messages">
       {this.props.messages.map((message) => {
         if (message.type === "incomingMessage") {
-          return <Message key ={message.id} content={message.content} username={message.username} color={message.color} />
+          return <Message key ={message.id}
+            content={message.content}
+            username={message.username}
+            color={message.color} />
         } else if (message.type === "incomingImg") {
           console.log('getttting throuuuugh')
-          return <ImgMessage key ={message.id} content={message.content} username={message.username} color={message.color} />
-          {/*return <Message key ={message.id} content={message.content} username={message.username} color={message.color} />*/}
+          return <ImgMessage key ={message.id}
+            content={message.content}
+            username={message.username}
+            color={message.color}
+            url={message.url} />
         } else {
           return <Notification key ={message.id} content={message.content} />
         }

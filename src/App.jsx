@@ -15,18 +15,10 @@ class App extends Component {
 
   addMessage = message => {
 
-    if(isImageUrl(message.content)) {
-      console.log('this is an img url');
-      const msgImg = {
-        type: "postImg",
-        username: message.username,
-        content: message.content,
-        color: this.state.color
-      }
-      // send message obj to server
-      this.socket.send(JSON.stringify(msgImg));
+    let string = message.content;
+    let matches = string.match(/\bhttps?:\/\/\S+/gi);
 
-    } else {
+    if (matches === null) {
       console.log('not an img url');
       const msg = {
         type: "postMessage",
@@ -36,6 +28,25 @@ class App extends Component {
       }
       // send message obj to server
       this.socket.send(JSON.stringify(msg));
+    } else {
+      // grab url from string and seperate it
+      const match = matches[0]
+      console.log(match);
+      string = string.replace(matches[0], "")
+      console.log(string);
+      // check if url is an img url
+      if(isImageUrl(match)) {
+        console.log('this is an img url');
+        const msgImg = {
+          type: "postImg",
+          username: message.username,
+          content: string,
+          url: match,
+          color: this.state.color
+        }
+          // send message obj to server
+        this.socket.send(JSON.stringify(msgImg));
+      }
 
     }
   }
