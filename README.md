@@ -3,7 +3,7 @@ Chatty App Project
 
 # Chatty App Project
 
-Chatty app is a client-side SPA (single-page app) built with ReactJS. Chatty will allow users to communicate with each other without having to register accounts.
+Chatty app is a client-side SPA (single-page app) built with ReactJS. Chatty will allow users to communicate with each other without having to register accounts. Users will be assigned as anonymous until a user inputs a new username and press `enter`. Each users will be assigned a random color to differentiate themselves from other users. A user can post an image by sending an image url through the chat box.
 
 
 ## Screenshots
@@ -30,3 +30,4 @@ Chatty app is a client-side SPA (single-page app) built with ReactJS. Chatty wil
 * UUID
 * WS
 * randomcolor
+* is-img-url
