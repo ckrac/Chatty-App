@@ -38,26 +38,23 @@ wss.on('connection', (ws) => {
   let countObj = {type: "incomingConnectionCount", totalClients : totalClients};
   // Upon connection to websocket, send total users currently connected to server
 
-  wss.clients.forEach(function each(client) {
-    if (client.readyState === WebSocket.OPEN) {
-      client.send(JSON.stringify(countObj));
-    }
-  });
+  // create a new reusable
+  wss.broadcast = function(data) {
+    wss.clients.forEach(function each(client) {
+      if (client.readyState === WebSocket.OPEN) {
+        client.send(JSON.stringify(data));
+      }
+    });
+  }
 
-wss.broadcast = function(data) {
-  wss.clients.forEach(function(client) {
-    client.send(data);
-  });
-};
+  wss.broadcast(countObj);
+
   // Handle incoming messages from client
   ws.on('message', function incoming(message) {
 
     let messageObj = JSON.parse(message)
     const id = uuidv4();
     messageObj.id = id;
-    console.log(messageObj)
-
-
 
     if(messageObj.type === "postMessage") {
       // check if it's a giphy img
@@ -81,31 +78,19 @@ wss.broadcast = function(data) {
         console.log(`User ${messageObj.username} said ${messageObj.content}, type = ${messageObj.type}`);
         messageObj.type = "incomingMessage";
 
-        wss.clients.forEach(function each(client) {
-          if (client.readyState === WebSocket.OPEN) {
-            client.send(JSON.stringify(messageObj));
-          }
-        });
-
+        wss.broadcast(messageObj);
       }
 
     } else  if (messageObj.type === "postNotification"){
       console.log(`Current user: ${messageObj.user}, type = ${messageObj.type}`)
       messageObj.type = "incomingNotification";
 
-      wss.clients.forEach(function each(client) {
-        if (client.readyState === WebSocket.OPEN) {
-          client.send(JSON.stringify(messageObj));
-        }
-      });
+      wss.broadcast(messageObj);
+
     } else if (messageObj.type === "postImg") {
       messageObj.type = "incomingImg";
 
-      wss.clients.forEach(function each(client) {
-        if (client.readyState === WebSocket.OPEN) {
-          client.send(JSON.stringify(messageObj));
-        }
-      });
+      wss.broadcast(messageObj);
     }
 
   })
@@ -116,10 +101,6 @@ wss.broadcast = function(data) {
     let count =  wss.clients.size;
     let decreaseCount = {type: "incomingUpdateConnection", totalClients : count};
     // update current users of the total current users when a user disconnects
-    wss.clients.forEach(function each(client) {
-    if (client.readyState === WebSocket.OPEN) {
-      client.send(JSON.stringify(decreaseCount));
-      }
-    });
+    wss.broadcast(decreaseCount);
   });
 });
