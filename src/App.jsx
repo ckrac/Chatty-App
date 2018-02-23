@@ -94,6 +94,16 @@ class App extends Component {
 
           break;
 
+        case "incomingGiphy":
+          // handle incoming message
+          if (data.username === "") {
+            data.username = "Anonymous";
+          }
+          const newGiphyMessage = [...this.state.messages, data];
+          this.setState({messages: newGiphyMessage});
+
+          break;
+
         case "incomingNotification":
           // handle incoming notification
           const newNotification = [...this.state.messages, data];

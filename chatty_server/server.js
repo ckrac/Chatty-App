@@ -1,6 +1,8 @@
 const express = require('express');
 const SocketServer = require('ws').Server;
 const WebSocket = require('ws');
+const querystring = require('querystring');
+const fetch = require('node-fetch');
 
 // id generator
 const uuidv4 = require('uuid/v4');
@@ -42,6 +44,11 @@ wss.on('connection', (ws) => {
     }
   });
 
+wss.broadcast = function(data) {
+  wss.clients.forEach(function(client) {
+    client.send(data);
+  });
+};
   // Handle incoming messages from client
   ws.on('message', function incoming(message) {
 
@@ -50,15 +57,37 @@ wss.on('connection', (ws) => {
     messageObj.id = id;
     console.log(messageObj)
 
-    if(messageObj.type === "postMessage") {
-      console.log(`User ${messageObj.username} said ${messageObj.content}, type = ${messageObj.type}`);
-      messageObj.type = "incomingMessage";
 
-      wss.clients.forEach(function each(client) {
-        if (client.readyState === WebSocket.OPEN) {
-          client.send(JSON.stringify(messageObj));
-        }
-      });
+
+    if(messageObj.type === "postMessage") {
+      // check if it's a giphy img
+      if (matches = messageObj.content.match(/^\/giphy (.+)$/)) {
+        console.log("got a giph");
+        let qs = querystring.stringify({
+          api_key: 'EssNbSCq24kxWDuJJxSaDA14CCxfN30K',
+          tag: matches[1]
+        });
+        fetch(`https://api.giphy.com/v1/gifs/random?${qs}`)
+          .then( resp => {return resp.json() } )
+          .then( json => {
+            messageObj.type = "incomingGiphy";
+            messageObj.content = `<img src="${json.data.image_url}" alt=""/>`;
+            const to_send = messageObj;
+            wss.broadcast(to_send);
+            console.log(`Sent: ${to_send}`);
+          })
+      // just a regular img
+      } else {
+        console.log(`User ${messageObj.username} said ${messageObj.content}, type = ${messageObj.type}`);
+        messageObj.type = "incomingMessage";
+
+        wss.clients.forEach(function each(client) {
+          if (client.readyState === WebSocket.OPEN) {
+            client.send(JSON.stringify(messageObj));
+          }
+        });
+
+      }
 
     } else  if (messageObj.type === "postNotification"){
       console.log(`Current user: ${messageObj.user}, type = ${messageObj.type}`)

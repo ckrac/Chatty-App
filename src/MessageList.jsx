@@ -2,9 +2,16 @@ import React, {Component} from 'react';
 import Message from './Message.jsx';
 import Notification from './Notification.jsx';
 import ImgMessage from './ImgMessage.jsx';
+import GiphyMessage from './GiphyMessage.jsx';
 
 
 class MessageList extends Component {
+
+  // browser scrolls down on the last element rendered
+  componentDidUpdate() {
+       window.scrollTo(0, document.body.scrollHeight);
+  }
+
   render() {
     console.log("Rendering <MessageList />");
     return (
@@ -16,8 +23,14 @@ class MessageList extends Component {
             username={message.username}
             color={message.color} />
         } else if (message.type === "incomingImg") {
-          console.log('getttting throuuuugh')
           return <ImgMessage key ={message.id}
+            content={message.content}
+            username={message.username}
+            color={message.color}
+            url={message.url} />
+
+        } else if (message.type === "incomingGiphy") {
+          return <GiphyMessage key ={message.id}
             content={message.content}
             username={message.username}
             color={message.color}
